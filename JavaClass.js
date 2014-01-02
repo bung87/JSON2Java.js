@@ -142,8 +142,14 @@ JavaClass.prototype={
                     break;
             }
         }
+/*        import java.util.ArrayList;
+import java.util.List;*/
+console.log(this.variables);
         var struct=[this.CLASSSTART,this.variables.join("\n"),this.methods.join("\n"),this.CLASSEND];
         var res=struct.join("\n");
+        if(res.indexOf('ArrayList')>=0){
+            res="import java.util.ArrayList;\nimport java.util.List;\n\n"+res;
+        }
         this.callback(res);
     }
 }
