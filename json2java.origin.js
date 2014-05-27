@@ -1,5 +1,4 @@
 !(function(moduleName, definition) {
-  // Whether to expose Draggable as an AMD module or to the global object.
   if (typeof define === 'function' && typeof define.amd === 'object') define(definition);
   if (typeof window !== 'undefined') window.JSON2Java = definition;
   if (typeof module !== 'undefined') module.exports = definition;
