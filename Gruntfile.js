@@ -42,7 +42,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build',['uglify:clean','uglify:compress']);
   function writeOut(cls,content){
-  grunt.file.write('out/'+cls+'.java', content,{encoding:'utf8'});
+    grunt.file.write('out/'+cls+'.java', content,{encoding:'utf8'});
+    grunt.log.ok('see output file:./out/'+cls+'.java');
   }
   grunt.registerTask('test','test',function(){
 

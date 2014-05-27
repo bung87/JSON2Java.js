@@ -5,8 +5,7 @@
 
 })('JSON2Java',(function(){
     function JSON2Java(a, options) {
-    // this.res = "", this.callback = options.callback, this.ONLY_GETTER = !0, 
-    // this.LESS_GETTER = !0,
+
     var defaultOptions={LESS_GETTER:!0,
         callback:function(){},
         ONLY_GETTER:!0
@@ -19,7 +18,7 @@
             this.options[k]=defaultOptions[k];
     }
 
-    this.CLASSNAME = a, this.CLASSSTART = "public class " + this.CLASSNAME + " {", 
+    this.CLASSNAME = a
     this.init();
     }
 
@@ -31,7 +30,7 @@
         LIST_STATEMENT_END : " = new ArrayList<Object>();",
     init: function() {
         this.variables = [], this.methods = [], 
-       
+        this.CLASSSTART = "public class " + this.CLASSNAME + " {", 
         this.BOOLEAN_STATEMENT = [ this.BOOLEAN_START, this.STATEMENT_END ], 
        
         this.DATE_START = this.access_type("Date"), this.OBJECT_START = this.access_type("Object"), 
@@ -51,12 +50,7 @@
             "List": this.LIST_STATEMENT
         };
     },
-    classname_changed: function() {
-        this.CLASSSTART = "public class " + this.CLASSNAME + " {";
-    },
-    access_changed: function() {
-        this.init();
-    },
+   
     protoTypeOf: function(a) {
         var b = Object.prototype.toString.call(a);
         return b.split(" ")[1].slice(0, -1);
@@ -70,11 +64,12 @@
     _subClass: function(a, b, c) {
         var d = "ObjectOf" + this._camelCase(b);
         if (this.sg(a, b, !0), null != c) {
-            var e = function() {};
-            e.prototype = this;
+            var e = JSON2Java;
+            e.prototype=JSON2Java.prototype;
+
             var f = new e(d, this.options);
-            f.variables = [], f.methods = [], f.CLASSNAME = d, 
-            f.classname_changed(), f.parse(c);
+
+            f.parse(c);
         }
     },
     sg: function(a, b, c) {

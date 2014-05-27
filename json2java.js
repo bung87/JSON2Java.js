@@ -23,8 +23,7 @@
         };
         this.options = {};
         for (var d in c) this.options[d] = "undefined" != typeof b[d] ? b[d] : c[d];
-        this.CLASSNAME = a, this.CLASSSTART = "public class " + this.CLASSNAME + " {", 
-        this.init();
+        this.CLASSNAME = a, this.init();
     }
     return a.prototype = {
         CLASSEND: "}",
@@ -33,7 +32,8 @@
         OBJECT_STATEMENT_END: " = new Object();",
         LIST_STATEMENT_END: " = new ArrayList<Object>();",
         init: function() {
-            this.variables = [], this.methods = [], this.BOOLEAN_STATEMENT = [ this.BOOLEAN_START, this.STATEMENT_END ], 
+            this.variables = [], this.methods = [], this.CLASSSTART = "public class " + this.CLASSNAME + " {", 
+            this.BOOLEAN_STATEMENT = [ this.BOOLEAN_START, this.STATEMENT_END ], 
             this.DATE_START = this.access_type("Date"), this.OBJECT_START = this.access_type("Object"), 
             this.LIST_START = this.access_type("List<Object>"), 
             this.INT_START = this.access_type("int"), this.STRING_START = this.access_type("String"), 
@@ -51,12 +51,6 @@
                 List: this.LIST_STATEMENT
             };
         },
-        classname_changed: function() {
-            this.CLASSSTART = "public class " + this.CLASSNAME + " {";
-        },
-        access_changed: function() {
-            this.init();
-        },
         protoTypeOf: function(a) {
             var b = Object.prototype.toString.call(a);
             return b.split(" ")[1].slice(0, -1);
@@ -67,14 +61,13 @@
         _camelCase: function(a) {
             return a[0].toUpperCase() + a.slice(1);
         },
-        _subClass: function(a, b, c) {
-            var d = "ObjectOf" + this._camelCase(b);
-            if (this.sg(a, b, !0), null != c) {
-                var e = function() {};
-                e.prototype = this;
-                var f = new e(d, this.options);
-                f.variables = [], f.methods = [], f.CLASSNAME = d, 
-                f.classname_changed(), f.parse(c);
+        _subClass: function(b, c, d) {
+            var e = "ObjectOf" + this._camelCase(c);
+            if (this.sg(b, c, !0), null != d) {
+                var f = a;
+                f.prototype = a.prototype;
+                var g = new f(e, this.options);
+                g.parse(d);
             }
         },
         sg: function(a, b, c) {
