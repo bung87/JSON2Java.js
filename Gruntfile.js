@@ -39,11 +39,18 @@ module.exports = function(grunt) {
  
   grunt.loadNpmTasks('grunt-contrib-uglify');
  
- 
-  grunt.registerTask('build',['uglify:clean','uglify:compress']);
 
+  grunt.registerTask('build',['uglify:clean','uglify:compress']);
+  function writeOut(cls,content){
+  grunt.file.write('out/'+cls+'.java', content,{encoding:'utf8'});
+  }
   grunt.registerTask('test','test',function(){
-    
+
+    var JSON2Java = require('./json2java.js'),
+    data = grunt.file.readJSON('sample.json'),
+    parser = new JSON2Java('AuthorProfile',{'ONLY_GETTER':false,'LESS_GETTER':false,'callback':writeOut});
+    parser.parse(data);
+
   });
 
 };

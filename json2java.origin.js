@@ -4,18 +4,36 @@
   if (typeof module !== 'undefined') module.exports = definition;
 
 })('JSON2Java',(function(){
-    function JSON2Java(a, b) {
-    this.res = "", this.callback = b, this.ONLY_GETTER = !0, 
-    this.LESS_GETTER = !0, this.CLASSNAME = a, this.CLASSSTART = "public class " + this.CLASSNAME + " {", 
-    this.CLASSEND = "}", this.variables = [], this.methods = [], 
+    function JSON2Java(a, options) {
+    // this.res = "", this.callback = options.callback, this.ONLY_GETTER = !0, 
+    // this.LESS_GETTER = !0,
+    var defaultOptions={LESS_GETTER:!0,
+        callback:function(){},
+        ONLY_GETTER:!0
+    };
+    this.options={};
+    for (var k in defaultOptions){
+        if(typeof options[k] !== 'undefined')
+            this.options[k]=options[k];
+        else
+            this.options[k]=defaultOptions[k];
+    }
+
+    this.CLASSNAME = a, this.CLASSSTART = "public class " + this.CLASSNAME + " {", 
     this.init();
     }
 
     JSON2Java.prototype = {
+        CLASSEND:"}",
+        STATEMENT_END :";",
+        BOOLEAN_START : "    private boolean ",
+        OBJECT_STATEMENT_END : " = new Object();",
+        LIST_STATEMENT_END : " = new ArrayList<Object>();",
     init: function() {
-        this.STATEMENT_END = ";", this.BOOLEAN_START = "    private boolean ", 
+        this.variables = [], this.methods = [], 
+       
         this.BOOLEAN_STATEMENT = [ this.BOOLEAN_START, this.STATEMENT_END ], 
-        this.OBJECT_STATEMENT_END = " = new Object();", this.LIST_STATEMENT_END = " = new ArrayList<Object>();", 
+       
         this.DATE_START = this.access_type("Date"), this.OBJECT_START = this.access_type("Object"), 
         this.LIST_START = this.access_type("List<Object>"), 
         this.INT_START = this.access_type("int"), this.STRING_START = this.access_type("String"), 
@@ -27,10 +45,10 @@
         this.memberVariable = {
             "boolean": this.BOOLEAN_STATEMENT,
             "int": this.INT_STATEMENT,
-            String: this.STRING_STATEMENT,
-            Object: this.OBJECT_STATEMENT,
-            Date: this.DATE_STATEMENT,
-            List: this.LIST_STATEMENT
+            "String": this.STRING_STATEMENT,
+            "Object": this.OBJECT_STATEMENT,
+            "Date": this.DATE_STATEMENT,
+            "List": this.LIST_STATEMENT
         };
     },
     classname_changed: function() {
@@ -44,7 +62,7 @@
         return b.split(" ")[1].slice(0, -1);
     },
     access_type: function(a) {
-        return this.ONLY_GETTER || this.LESS_GETTER ? " public " + a + " " : "  private " + a + " ";
+        return this.options.ONLY_GETTER || this.options.LESS_GETTER ? "    public " + a + " " : "    private " + a + " ";
     },
     _camelCase: function(a) {
         return a[0].toUpperCase() + a.slice(1);
@@ -54,7 +72,7 @@
         if (this.sg(a, b, !0), null != c) {
             var e = function() {};
             e.prototype = this;
-            var f = new e(d, this.callback);
+            var f = new e(d, this.options);
             f.variables = [], f.methods = [], f.CLASSNAME = d, 
             f.classname_changed(), f.parse(c);
         }
@@ -67,8 +85,8 @@
         } else this.variables.push(this.memberVariable[a].join(b));
         var f = "get";
         "boolean" == a && (f = "is");
-        var g = "   public " + a + " " + f + this._camelCase(b) + "(){\n        return " + b + ";\n }", h = "   public void set" + this._camelCase(b) + "(" + a + " " + b + "){\n       this." + b + " = " + b + ";\n   }";
-        this.ONLY_GETTER || this.LESS_GETTER ? this.LESS_GETTER ? "boolean" == a && this.methods.push(g) : this.methods.push(g) : this.methods.push(g, h);
+        var g = "    public " + a + " " + f + this._camelCase(b) + "(){\n        return " + b + ";\n    }", h = "    public void set" + this._camelCase(b) + "(" + a + " " + b + "){\n       this." + b + " = " + b + ";\n    }";
+        this.options.ONLY_GETTER || this.options.LESS_GETTER ? this.options.LESS_GETTER ? "boolean" == a && this.methods.push(g) : this.methods.push(g) : this.methods.push(g, h);
     },
     parse: function(a) {
         for (o in a) switch (this.protoTypeOf(a[o])) {
@@ -95,9 +113,9 @@
           case "String":
             this.sg("String", o);
         }
-        var c = [ this.CLASSSTART, this.variables.join("\n"), this.methods.join("\n"), this.CLASSEND ], d = c.join("\n");
+        var c = [ this.CLASSSTART,'', this.variables.join("\n"), this.methods.join("\n"), this.CLASSEND ], d = c.join("\n");
         d.indexOf("ArrayList") >= 0 && (d = "import java.util.ArrayList;\nimport java.util.List;\n\n" + d), 
-        this.callback(d);
+        this.options.callback(this.CLASSNAME,d);
     }
     };
 
