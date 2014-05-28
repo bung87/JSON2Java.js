@@ -1,5 +1,5 @@
 /*!
- * json2java.js
+ * JSON2Java.js
  * Author:bung
  * Summary:A Javascript program to generate Java model class from JSON    demo: http://www.bungos.me/project/json-java/
  * License:MIT
@@ -15,7 +15,7 @@
     "undefined" != typeof window && (window.JSON2Java = b), 
     "undefined" != typeof module && (module.exports = b);
 }("JSON2Java", function() {
-    function a(a, b) {
+    function JSON2Java(a, b) {
         var c = {
             LESS_GETTER: !0,
             callback: function() {},
@@ -25,7 +25,7 @@
         for (var d in c) this.options[d] = "undefined" != typeof b[d] ? b[d] : c[d];
         this.CLASSNAME = a, this.init();
     }
-    return a.prototype = {
+    return JSON2Java.prototype = {
         CLASSEND: "}",
         STATEMENT_END: ";",
         BOOLEAN_START: "    private boolean ",
@@ -61,13 +61,13 @@
         _camelCase: function(a) {
             return a[0].toUpperCase() + a.slice(1);
         },
-        _subClass: function(b, c, d) {
-            var e = "ObjectOf" + this._camelCase(c);
-            if (this.sg(b, c, !0), null != d) {
-                var f = a;
-                f.prototype = a.prototype;
-                var g = new f(e, this.options);
-                g.parse(d);
+        _subClass: function(a, b, c) {
+            var d = "ObjectOf" + this._camelCase(b);
+            if (this.sg(a, b, !0), null != c) {
+                var e = JSON2Java;
+                e.prototype = JSON2Java.prototype;
+                var f = new e(d, this.options);
+                f.parse(c);
             }
         },
         sg: function(a, b, c) {
@@ -110,5 +110,5 @@
             d.indexOf("ArrayList") >= 0 && (d = "import java.util.ArrayList;\nimport java.util.List;\n\n" + d), 
             this.options.callback(this.CLASSNAME, d);
         }
-    }, a;
+    }, JSON2Java;
 }());

@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    script:'json2java',
+    script:'JSON2Java',
     banner:'/*!\n * <%= script %>.js\n'+
            ' * Author:<%= pkg.author %>\n'+
            ' * Summary:<%= pkg.description %>\n'+
@@ -23,7 +23,7 @@ module.exports = function(grunt) {
             beautify: true
           },
           mangle: {
-            except: ['json2java']
+            except: ['JSON2Java']
           }
       },
         src: '<%= script %>.origin.js',
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
   }
   grunt.registerTask('test','test',function(){
 
-    var JSON2Java = require('./json2java.js'),
+    var JSON2Java = require('./JSON2Java.js'),
     data = grunt.file.readJSON('sample.json'),
     parser = new JSON2Java('AuthorProfile',{'ONLY_GETTER':false,'LESS_GETTER':false,'callback':writeOut});
     parser.parse(data);

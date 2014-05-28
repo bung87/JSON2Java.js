@@ -2,7 +2,7 @@
   "name": "Json2Java",
   "version": "0.1.0",
   "description": "A Javascript program to generate Java model class from JSON    demo: http://www.bungos.me/project/json-java/",
-  "main": "json2java.js",
+  "main": "JSON2Java.js",
   "scripts": {
     "test": "grunt test"
   },
