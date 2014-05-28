@@ -6,8 +6,8 @@
  * Version: 0.1.0
  *
  * URL:
- * https://github.com/bung87/Json2Java
- * https://github.com/bung87/Json2Java/blob/master/LICENSE
+ * https://github.com/bung87/JSON2Java.js
+ * https://github.com/bung87/JSON2Java.js/blob/master/LICENSE
  *
  */
 !function(a, b) {
